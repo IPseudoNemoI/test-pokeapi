@@ -43,14 +43,21 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+
     implementation(libs.dagger.hilt.android)
     kapt(libs.hilt.compiler)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    implementation(libs.glide.transformations)
     implementation(libs.glide)
     kapt(libs.glide.compiler)
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
