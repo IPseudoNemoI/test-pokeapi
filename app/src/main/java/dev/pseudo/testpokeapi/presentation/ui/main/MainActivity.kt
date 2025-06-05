@@ -46,12 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         configureWindowStyle()
 
-        viewModel.error.observe(this) { errorMessage ->
-            if (errorMessage != null) {
-                Toast.makeText(this, "Error: $errorMessage", Toast.LENGTH_LONG).show()
-            }
-        }
-
         viewModel.loadPokemon()
     }
 

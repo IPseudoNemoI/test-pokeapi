@@ -1,6 +1,5 @@
 package dev.pseudo.testpokeapi.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,36 +9,72 @@ import dev.pseudo.testpokeapi.domain.model.Pokemon
 import dev.pseudo.testpokeapi.domain.repository.PokemonRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: PokemonRepository
 ) : ViewModel() {
 
-    private val _pokemonList = MutableLiveData<List<Pokemon>>(emptyList())
-    val pokemonList: LiveData<List<Pokemon>> = _pokemonList
-
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    private val _uiState = MutableLiveData<PokemonListUiState>()
+    val uiState: LiveData<PokemonListUiState> = _uiState
 
     private var offset = 0
     private var isLoading = false
+    private var currentList = mutableListOf<Pokemon>()
 
     fun loadPokemon(limit: Int = 30) {
         if (isLoading) return
         isLoading = true
 
+        _uiState.value = PokemonListUiState.Loading
+
         viewModelScope.launch {
             try {
                 val newList = repository.getPokemonList(limit, offset)
                 offset += limit
-                val currentList = _pokemonList.value ?: emptyList()
-                _pokemonList.value = currentList + newList
+                currentList.addAll(newList)
+                _uiState.value = PokemonListUiState.Success(currentList)
             } catch (e: Exception) {
-                _error.value = e.message
+                if (currentList.isEmpty()) {
+                    _uiState.value = PokemonListUiState.Error(e.message ?: "No connection")
+                } else {
+                    _uiState.value = PokemonListUiState.Success(currentList)
+                }
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun loadRandomPokemonList(limit: Int = 30, maxPokemonCount: Int = 1250) {
+        if (isLoading) return
+        isLoading = true
+
+        _uiState.value = PokemonListUiState.Loading
+
+        viewModelScope.launch {
+            try {
+                val maxOffset = maxPokemonCount - limit
+                val randomOffset = Random.nextInt(0, maxOffset.coerceAtLeast(0))
+
+                val newList = repository.getPokemonList(limit, randomOffset)
+                offset = randomOffset + limit
+                currentList = newList.toMutableList()
+
+                _uiState.value = PokemonListUiState.Success(currentList)
+            } catch (e: Exception) {
+                _uiState.value = PokemonListUiState.Error(e.message ?: "Failed to load random Pokémon list")
             } finally {
                 isLoading = false
             }
         }
     }
 }
+
+sealed class PokemonListUiState {
+    object Loading : PokemonListUiState()
+    data class Success(val data: List<Pokemon>) : PokemonListUiState()
+    data class Error(val message: String) : PokemonListUiState()
+}
+

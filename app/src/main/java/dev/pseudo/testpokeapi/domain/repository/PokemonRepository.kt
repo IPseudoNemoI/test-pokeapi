@@ -7,4 +7,6 @@ interface PokemonRepository {
     suspend fun getPokemonList(limit: Int, offset: Int): List<Pokemon>
 
     suspend fun getPokemonInfo(name: String): PokemonInfo
+
+    suspend fun getRandomPokemonList(minLimit: Int = 30): List<Pokemon>
 }

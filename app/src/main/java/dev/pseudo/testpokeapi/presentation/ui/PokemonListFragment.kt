@@ -15,6 +15,7 @@ import dev.pseudo.testpokeapi.R
 import dev.pseudo.testpokeapi.databinding.FragmentPokemonListBinding
 import dev.pseudo.testpokeapi.presentation.adapter.PokemonAdapter
 import dev.pseudo.testpokeapi.presentation.viewmodel.MainViewModel
+import dev.pseudo.testpokeapi.presentation.viewmodel.PokemonListUiState
 
 @AndroidEntryPoint
 class PokemonListFragment : Fragment() {
@@ -36,7 +37,7 @@ class PokemonListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initPokemonAdapter()
-        observePokemonList()
+        observeUiState()
         setListeners()
 
         viewModel.loadPokemon()
@@ -49,13 +50,33 @@ class PokemonListFragment : Fragment() {
                 bundleOf("pokemonName" to selectedPokemon.name)
             )
         }
-
         binding.pokemonRecyclerView.adapter = adapter
     }
 
-    private fun observePokemonList() {
-        viewModel.pokemonList.observe(viewLifecycleOwner) { list ->
-            adapter.updateList(list)
+    private fun observeUiState() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is PokemonListUiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.errorText.visibility = View.GONE
+                }
+
+                is PokemonListUiState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.errorText.visibility = View.GONE
+                    binding.pokemonRecyclerView.visibility = View.VISIBLE
+                    adapter.updateList(state.data)
+                }
+
+                is PokemonListUiState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    if (adapter.itemCount == 0) {
+                        binding.errorText.visibility = View.VISIBLE
+                        binding.pokemonRecyclerView.visibility = View.GONE
+                        binding.errorText.text = state.message
+                    }
+                }
+            }
         }
     }
 
@@ -75,6 +96,9 @@ class PokemonListFragment : Fragment() {
                 }
             },
         )
+        binding.reloadButton.setOnClickListener {
+            viewModel.loadRandomPokemonList()
+        }
     }
 }
 
