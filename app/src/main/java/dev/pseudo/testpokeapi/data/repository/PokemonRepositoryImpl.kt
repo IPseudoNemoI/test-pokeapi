@@ -1,5 +1,6 @@
 package dev.pseudo.testpokeapi.data.repository
 
+import dev.pseudo.testpokeapi.data.model.PokemonInfo
 import dev.pseudo.testpokeapi.data.remote.PokeApiService
 import dev.pseudo.testpokeapi.domain.model.Pokemon
 import dev.pseudo.testpokeapi.domain.repository.PokemonRepository
@@ -18,5 +19,9 @@ class PokemonRepositoryImpl @Inject constructor(
                 imageUrl = imageUrl
             )
         }
+    }
+
+    override suspend fun getPokemonInfo(name: String): PokemonInfo {
+        return apiService.getPokemonInfo(name)
     }
 }

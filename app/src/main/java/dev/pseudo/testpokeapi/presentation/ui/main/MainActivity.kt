@@ -94,9 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleBackPress() {
         when (navController.currentDestination?.id) {
-            //           R.id.navigation_tabs,
-            //               -> navController.navigateUp()
-            else -> {
+            R.id.navigation_pokemon_list -> {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - lastBackPressedTime < APP_EXIT_DELAY) {
                     finishAffinity()
@@ -109,8 +107,12 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+            else -> {
+                navController.navigateUp()
+            }
         }
     }
+
 
     private fun initNavController() {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment)?.let { fragment ->

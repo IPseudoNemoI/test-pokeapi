@@ -12,7 +12,8 @@ import dev.pseudo.testpokeapi.domain.model.Pokemon
 import java.util.Locale
 
 class PokemonAdapter(
-    private var items: List<Pokemon>
+    private var items: List<Pokemon>,
+    private val onClick: (Pokemon) -> Unit
 ) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
 
     class PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +35,10 @@ class PokemonAdapter(
             ) else it.toString()
         }
 
-        // Загрузка картинки через Glide (подключи зависимость Glide в build.gradle)
+        holder.itemView.setOnClickListener {
+            onClick(items[position])
+        }
+
         Glide.with(holder.imageView.context)
             .load(pokemon.imageUrl)
             .centerCrop()

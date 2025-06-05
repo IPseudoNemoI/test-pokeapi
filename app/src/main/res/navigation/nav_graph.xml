@@ -7,5 +7,12 @@
     <fragment
         android:id="@+id/navigation_pokemon_list"
         android:name="dev.pseudo.testpokeapi.presentation.ui.PokemonListFragment" />
+    <action
+        android:id="@+id/action_pokemonListFragment_to_pokemonInfoFragment"
+        app:destination="@id/navigation_pokemon_info" />
+
+    <fragment
+        android:id="@+id/navigation_pokemon_info"
+        android:name="dev.pseudo.testpokeapi.presentation.ui.PokemonInfoFragment" />
 
 </navigation>
