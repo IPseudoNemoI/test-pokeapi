@@ -31,17 +31,14 @@ This is a simple Android application that serves as a client for the [PokéAPI](
 
 ## Screenshots
 
-### Main Screen
-![Main Screen](screenshots/1.png)
-
-### Info Screen
-![Info Screen](screenshots/2.png)
+### Main & Info Screen
+<img src="screenshots/1.png" alt="Main Screen" width="300"/> <img src="screenshots/2.png" alt="Info Screen" width="300"/>
 
 ### Bottom right we can press Update Button
-![Update Button](screenshots/3.png)
+<img src="screenshots/3.png" alt="Update Button" width="300"/>
 
-### Sorting by stats using CheckBox
-![CheckBox](screenshots/4.png)
+### Sort by stats from highest to lowest
+<img src="screenshots/4.png" alt="CheckBox" width="300"/>
 
 ## Getting Started
 
