@@ -29,6 +29,20 @@ This is a simple Android application that serves as a client for the [PokéAPI](
 - **Glide** for image loading
 - **RecyclerView** for lists
 
+## Screenshots
+
+### Main Screen
+![Main Screen](screenshots/1.png)
+
+### Info Screen
+![Info Screen](screenshots/2.png)
+
+### Bottom right we can press Update Button
+![Update Button](screenshots/3.png)
+
+### Sorting by stats using CheckBox
+![CheckBox](screenshots/4.png)
+
 ## Getting Started
 
 1. Clone the repository:
