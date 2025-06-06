@@ -17,12 +17,18 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun getPokemonList(limit: Int, offset: Int): List<Pokemon> {
         val response = apiService.getPokemonList(limit, offset)
+
         return response.results.map { entry ->
-            val id = entry.url.trimEnd('/').split("/").last()
-            val imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+            val info = apiService.getPokemonInfo(entry.name)
+            val imageUrl =
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${info.id}.png"
+
             Pokemon(
                 name = entry.name.replaceFirstChar { it.uppercase() },
-                imageUrl = imageUrl
+                imageUrl = imageUrl,
+                attack = info.stats.find { it.stat.name == "attack" }?.base_stat ?: 0,
+                defense = info.stats.find { it.stat.name == "defense" }?.base_stat ?: 0,
+                hp = info.stats.find { it.stat.name == "hp" }?.base_stat ?: 0
             )
         }
     }

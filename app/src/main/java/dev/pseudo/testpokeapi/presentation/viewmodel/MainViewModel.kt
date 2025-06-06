@@ -22,6 +22,7 @@ class MainViewModel @Inject constructor(
     private var offset = 0
     private var isLoading = false
     private var currentList = mutableListOf<Pokemon>()
+    private var originalList = mutableListOf<Pokemon>()
 
     fun loadPokemon(limit: Int = 30) {
         if (isLoading) return
@@ -34,6 +35,8 @@ class MainViewModel @Inject constructor(
                 val newList = repository.getPokemonList(limit, offset)
                 offset += limit
                 currentList.addAll(newList)
+                originalList.addAll(newList)
+
                 _uiState.value = PokemonListUiState.Success(currentList)
             } catch (e: Exception) {
                 if (currentList.isEmpty()) {
@@ -61,14 +64,32 @@ class MainViewModel @Inject constructor(
                 val newList = repository.getPokemonList(limit, randomOffset)
                 offset = randomOffset + limit
                 currentList = newList.toMutableList()
+                originalList = newList.toMutableList()
 
                 _uiState.value = PokemonListUiState.Success(currentList)
             } catch (e: Exception) {
-                _uiState.value = PokemonListUiState.Error(e.message ?: "Failed to load random Pokémon list")
+                _uiState.value =
+                    PokemonListUiState.Error(e.message ?: "Failed to load random Pokemon list")
             } finally {
                 isLoading = false
             }
         }
+    }
+
+    fun sortByStats(byAttack: Boolean, byDefense: Boolean, byHp: Boolean) {
+        currentList = if (!byAttack && !byDefense && !byHp) {
+            originalList.toMutableList()
+        } else {
+            currentList.sortedWith(compareByDescending<Pokemon> { pokemon ->
+                var score = 0
+                if (byAttack) score += pokemon.attack
+                if (byDefense) score += pokemon.defense
+                if (byHp) score += pokemon.hp
+                score
+            }).toMutableList()
+        }
+
+        _uiState.value = PokemonListUiState.Success(currentList)
     }
 }
 

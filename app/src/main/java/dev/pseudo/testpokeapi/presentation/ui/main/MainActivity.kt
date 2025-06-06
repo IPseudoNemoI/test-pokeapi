@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+
             else -> {
                 navController.navigateUp()
             }

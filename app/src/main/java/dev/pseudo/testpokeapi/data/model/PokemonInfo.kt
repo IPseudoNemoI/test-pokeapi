@@ -15,7 +15,7 @@ data class PokemonInfo(
             return ParsedStats(
                 attack = map["attack"]?.base_stat ?: 0,
                 defense = map["defense"]?.base_stat ?: 0,
-                hp = map["hp"]?.base_stat ?: 0
+                hp = map["hp"]?.base_stat ?: 0,
             )
         }
 }

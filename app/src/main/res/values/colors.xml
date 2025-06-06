@@ -23,4 +23,7 @@
     <color name="steel">#B7B7CE</color>
     <color name="fairy">#D685AD</color>
     <color name="default_type">#A8A878</color>
+    <color name="hp">#C22E28</color>
+    <color name="defense">#1E88E5</color>
+    <color name="attack">#EE8130</color>
 </resources>

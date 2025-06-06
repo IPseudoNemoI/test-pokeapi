@@ -94,11 +94,24 @@ class PokemonListFragment : Fragment() {
                         viewModel.loadPokemon()
                     }
                 }
-            },
+            }
         )
+
         binding.reloadButton.setOnClickListener {
             viewModel.loadRandomPokemonList()
         }
+
+        binding.attackCheckBox.setOnCheckedChangeListener { _, _ -> sort() }
+        binding.defenseCheckBox.setOnCheckedChangeListener { _, _ -> sort() }
+        binding.hpCheckBox.setOnCheckedChangeListener { _, _ -> sort() }
+    }
+
+    private fun sort() {
+        viewModel.sortByStats(
+            binding.attackCheckBox.isChecked,
+            binding.defenseCheckBox.isChecked,
+            binding.hpCheckBox.isChecked
+        )
     }
 }
 

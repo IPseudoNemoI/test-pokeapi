@@ -59,7 +59,7 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    implementation (libs.material)
+    implementation(libs.material)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
